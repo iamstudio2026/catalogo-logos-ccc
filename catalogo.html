@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo de Logos CCC</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f2f5;
+    padding: 2rem;
+    color: #1a1a2e;
+  }
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #16213e;
+  }
+  .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+  }
+  .card-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    padding: 1.5rem;
+    background: #fafafa;
+    display: block;
+  }
+  .card-label {
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-top: 1px solid #eee;
+    color: #333;
+    background: #fff;
+  }
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 3rem;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .lightbox-close:hover { opacity: 1; }
+  .lightbox-label {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    background: rgba(0,0,0,0.5);
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+  }
+  .count {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #888;
+    font-size: 0.95rem;
+  }
+  @media (max-width: 600px) {
+    body { padding: 1rem; }
+    h1 { font-size: 1.8rem; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>CCC — Catálogo de Logos</h1>
+<p class="subtitle">Centro de Capacitación Cinematográfica</p>
+<p class="count" id="fileCount"></p>
+
+<div class="grid" id="grid"></div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-label" id="lightboxLabel"></div>
+</div>
+
+<script>
+const files = [
+  "logo ccc (4).png","logo ccc (5).png","logo ccc (6).png","logo ccc (7).png",
+  "logo ccc (8).png","logo ccc (9).png","logo ccc (10).png","logo ccc (11).png",
+  "logo ccc (12).png","logo ccc (13).png","logo ccc (14).png","logo ccc (15).png",
+  "logo ccc (16).png","logo ccc (17).png","logo ccc (18).png","logo ccc (19).png",
+  "logo ccc (20).png","logo ccc (21).png","logo ccc (22).png","logo ccc (23).png",
+  "logo ccc (24).png","logo ccc (25).png","logo ccc (26).png","logo ccc (27).png",
+  "logo ccc (28).png","logo ccc (29).png","logo ccc (30).png","logo ccc (31).png",
+  "logo ccc (32).png"
+];
+
+document.getElementById("fileCount").textContent = files.length + " logos";
+
+const grid = document.getElementById("grid");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+const lightboxLabel = document.getElementById("lightboxLabel");
+
+files.forEach(f => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<img class="card-img" src="${f}" alt="${f}" loading="lazy"><div class="card-label">${f.replace(".png","").replace("logo ccc (","#").replace(")","")}</div>`;
+  card.addEventListener("click", () => {
+    lightboxImg.src = f;
+    lightboxLabel.textContent = f.replace(".png","").replace("logo ccc (","Logo #").replace(")","");
+    lightbox.classList.add("active");
+  });
+  grid.appendChild(card);
+});
+
+function closeLightbox(e) {
+  if (!e || e.target === lightbox) lightbox.classList.remove("active");
+}
+document.addEventListener("keydown", e => { if (e.key === "Escape") lightbox.classList.remove("active"); });
+</script>
+</body>
+</html>
